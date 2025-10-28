@@ -1,0 +1,69 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+
+.ai-tools-body-container {
+  padding: 20px;
+}
+
+/* Breadcrumb Navigation */
+.ai-tools-breadcrumb {
+  margin: 10px 0;
+}
+
+/* Hero Section */
+.ai-tools-hero {
+  text-align: center;
+}
+
+/* Categories Section */
+.ai-tools-categories {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap */
+  gap: 50px; /* Space between cards */
+  padding: 10px;
+  justify-content: center; /* Center cards horizontally */
+}
+
+/* Individual Category Card */
+.ai-tools-card {
+  display: flex;
+  flex-direction: column; /* Stack image and content vertically */
+  background: #fff; /* Card background color */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(245, 241, 241, 0.8); /* Shadow effect */
+  overflow: hidden; /* Prevent overflow */
+  transition: transform 0.3s; /* Smooth scaling effect */
+}
+
+/* Card Body */
+.ai-tools-card-body {
+  flex-direction: row;
+}
+
+/* Image in the Card */
+.ai-tools-card-img-top {
+  width: 100%; /* Full width */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Title of the Card */
+.ai-tools-card-title {
+  font-size: 18px; /* Font size for title */
+  color: #17153b; /* Title color */
+}
+
+/* Subtitle of the Card */
+.ai-tools-card-subtitle {
+  font-size: 14px; /* Font size for subtitle */
+  color: #666; /* Subtitle color */
+}
+
+/* Link to Show All */
+.ai-tools-card-link {
+  cursor: pointer; /* Pointer on hover */
+  color: #007bff; /* Link color */
+}

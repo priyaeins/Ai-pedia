@@ -1,0 +1,103 @@
+.tutorial-container {
+  padding: 20px;
+}
+
+/* Header Section */
+.tutorial-header-container {
+  text-align: center;
+}
+
+/* Title of the Tutorials */
+.tutorial-title {
+  color: #fff;
+  font-size: 2.5rem;
+}
+
+/* Breadcrumb Navigation */
+.tutorial-breadcrumb {
+  margin: 10px 0;
+  padding: 0 10px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.tutorial-breadcrumb span {
+  cursor: pointer;
+  padding-right: 10px;
+  color: #007bff; /* Link color */
+}
+
+.tutorial-breadcrumb span:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Search Bar Section */
+.tutorial-search-bar {
+  margin: 10px;
+  text-align: center;
+}
+
+/* Input field for the Search Bar */
+.tutorial-search-input {
+  padding: 10px;
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box; /* Include padding in width */
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Card Container Section */
+.tutorial-card-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap */
+  gap: 50px; /* Space between cards */
+  padding: 10px;
+  justify-content: center; /* Center cards horizontally */
+  margin-top: 50px; /* Space above card container */
+}
+
+/* Individual Tutorial Card */
+.tutorial-card {
+  display: flex;
+  flex-direction: column; /* Stack image and content vertically */
+  align-items: center; /* Center align items */
+  background: #fff; /* Card background color */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(245, 241, 241, 0.8); /* Shadow effect */
+  width: 250px; /* Fixed width for cards */
+  overflow: hidden; /* Prevent overflow */
+  transition: transform 0.3s; /* Smooth scaling effect */
+}
+
+/* Hover effect on card */
+.tutorial-card:hover {
+  transform: scale(1.05); /* Scale card on hover */
+}
+
+/* Image in the Tutorial Card */
+.tutorial-card-image {
+  width: 100%; /* Full width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Cover the image area */
+}
+
+/* Content inside the Card */
+.tutorial-card-content {
+  padding: 15px; /* Space around content */
+  text-align: center; /* Center align text */
+}
+
+/* Title of the Card */
+.tutorial-card-title {
+  font-size: 18px; /* Font size for title */
+  margin: 10px 0; /* Margin above and below title */
+  color: #17153b; /* Title color */
+  cursor: pointer; /* Pointer on hover */
+}
+
+/* Description of the Card */
+.tutorial-card-description {
+  font-size: 14px; /* Font size for description */
+  color: #666; /* Description color */
+}

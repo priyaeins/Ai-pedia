@@ -1,0 +1,45 @@
+.categories {
+  width: 100%;
+  height: auto;
+  position: relative;
+  padding-bottom: 10%;
+  margin-top: 5%;
+  color: #fff;
+  text-align: center;
+}
+
+.categoriesH1 {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.categoriesImg1 {
+  width: 60px;
+  height: 60px;
+}
+
+.categoriesDiv1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: 90%;
+}
+
+.categoriesBtnContainer {
+  display: flex;
+  justify-content: flex-start; /* Align items at the start */
+  align-items: center;
+  flex-direction: row; /* Arrange buttons in a row */
+  flex-wrap: wrap; /* Ensure buttons wrap onto the next line */
+  gap: 20px; /* Space between buttons */
+  max-width: 600px; /* Set max width to control wrapping */
+  width: 100%; /* Make sure the container spans the full width */
+  margin: 0 auto; /* Center the container */
+}
+
+.categoriesBtnContainer button {
+  white-space: wrap; /* Prevent button text from wrapping */
+}

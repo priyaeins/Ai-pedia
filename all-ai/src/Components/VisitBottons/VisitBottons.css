@@ -1,0 +1,14 @@
+.visitButton {
+  width: 80px;
+  height: 40px;
+  background-color: transparent;
+  color: #04102c;
+  border: 2px solid #04102c; /* Adjusted for visibility */
+  border-radius: 2px; /* Added unit for border-radius */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+.visitButton:hover {
+  background-color: #04102c;
+  color: #fff;
+}

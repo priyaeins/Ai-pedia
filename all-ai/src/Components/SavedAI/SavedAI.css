@@ -1,0 +1,30 @@
+/* SavedAI.css */
+.saved-ai-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #cecece;
+  color: #04102c;
+  padding: 20px;
+}
+
+.saved-ai-header {
+  background-color: #cecece;
+  text-align: center;
+  width: 100%;
+}
+
+.ai-card {
+  background-color: white; /* Background color of individual cards */
+  border: 1px solid #04102c; /* Optional: border color */
+  border-radius: 8px; /* Optional: rounded corners */
+  margin: 10px; /* Space between cards */
+  padding: 10px; /* Inner padding */
+  flex: 1 1 200px; /* Flex-grow, flex-shrink, and flex-basis */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+  transition: transform 0.2s; /* Optional: smooth scaling effect */
+}
+
+.ai-card:hover {
+  transform: scale(1.05); /* Optional: scale up on hover */
+}

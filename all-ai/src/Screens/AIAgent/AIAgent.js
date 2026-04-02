@@ -1,367 +1,182 @@
 import React, { useState, useEffect } from "react";
+import ReactPaginate from "react-paginate";
+import { IconSearch, IconAdjustmentsHorizontal, IconRobot } from "@tabler/icons-react";
 import Header from "../../Components/Header/Header";
 import WebFooter from "../../Components/Footer/Footer";
 import AIImagecards from "../../Components/AIImagecards/AIImagecards";
-import BasicSelect from "../../Components/BasicSelect";
-import "./AIAgent.css";
 import TrendingAI from "../../Components/TrendingAI/TrendingAI";
-import ReactPaginate from "react-paginate";
-import AIEdu from "../../Components/AIEdu";
-import AlertModal from "../../Components/AlertModal";
+import AlertModal from "../../Components/AlertModal/AlertModal";
+import { tools } from "../../data/tools";
+import "./AIAgent.css";
 
-const newItems = [
-  {
-    Bookmarked: false,
-    id: "9",
-    Name: "AgentVerse",
-    hashtag: "#ai agents#workflows #startup tools",
-    image: "/Assets/a3.webp",
-    rating: 5,
-    category: "Trending",
-    toolCategory: "startup tools",
-    status: "paid",
-    visitLink:
-      "https://agentverse.ai/?utm_source=futurepedia&utm_medium=marketplace&utm_campaign=futurepedia",
-    description:
-      "AgentVerse is a cutting-edge AI tool designed to revolutionize the way we interact with digital agents. Developed by Fetch.ai, it offers a unique platform where users can explore, create, and manage AI agents with ease.",
-  },
-  {
-    Bookmarked: false,
-    id: "10",
-    Name: "Baby AGI",
-    category: "Trending",
-    toolCategory: "research",
-    hashtag: "#research#education",
-    image: "/Assets/a1.webp",
-    rating: 5,
-    status: "free",
-    visitLink:
-      "https://github.com/yoheinakajima/babyagi?utm_source=futurepedia&utm_medium=marketplace&utm_campaign=futurepedia",
-    description:
-      "Baby AGI is an innovative AI tool that is designed to push the boundaries of artificial general intelligence (AGI). ",
-  },
-  {
-    Bookmarked: false,
-    id: "11",
-    Name: "Kintext",
-    category: "New",
-    toolCategory: "research",
-    hashtag: "#ai agents #transcriber",
-    image: "/Assets/b4.avif",
-    rating: 0,
-    status: "paid",
-    visitLink:
-      "https://kintext.com/?utm_source=futurepedia&utm_medium=marketplace&utm_campaign=futurepedia",
-    description:
-      "Kintext is an innovative AI assistant designed specifically for parenting. It blends artificial intelligence with empathetic understanding to assist with parenting tasks.",
-  },
-  {
-    Bookmarked: false,
-    id: "12",
-    Name: "Stratup.ai",
-    category: "New",
-    toolCategory: "research",
-    hashtag: "#startup tools #ai agents #research",
-    image: "/Assets/a6.svg",
-    rating: 5,
-    status: "free",
-    visitLink:
-      "https://stratup.ai/?utm_source=futurepedia&utm_medium=marketplace&utm_campaign=futurepedia",
-    description:
-      "Stratup.ai is a groundbreaking AI-powered tool designed to revolutionize the way entrepreneurs and innovators approach the ideation process.",
-  },
-  {
-    Bookmarked: false,
-    id: "13",
-    Name: "Meshy",
-    category: "Popular",
-    toolCategory: "design",
-    hashtag: "#3D#design generators #ai agents",
-    image: "/Assets/a7.svg",
-    rating: 5,
-    status: "freemium",
-    visitLink:
-      "https://www.meshy.ai/?utm_source=futurepedia&utm_medium=ads&utm_campaign=Meshy-4",
-    description:
-      "Meshy is a cutting-edge AI tool that reshapes 3D content creation. It uses AI to transform text and images into detailed 3D models and textures.",
-  },
-  {
-    Bookmarked: false,
-    id: "14",
-    Name: "Inworld",
-    hashtag: "#avatars#ai agents#workflows",
-    image: "/Assets/b5.avif",
-    category: "New",
-    toolCategory: "avatars",
-    rating: 2,
-    status: "freemium",
-    visitLink:
-      "https://www.inworld.ai/?utm_source=futurepedia&utm_medium=marketplace&utm_campaign=futurepedia",
-    description:
-      "Inworld is an AI engine designed to revolutionize game development by introducing dynamic non-player characters (NPCs) and evolving game worlds.",
-  },
-  {
-    Bookmarked: false,
-    id: "15",
-    Name: "Olympia",
-    hashtag: "#email assistant#personal assistant",
-    category: "Popular",
-    toolCategory: "personal assistant",
-    image: "/Assets/a11.svg",
-    rating: 5,
-    status: "paid",
-    visitLink:
-      "https://olympia.chat/?utm_source=futurepedia&utm_medium=marketplace&utm_campaign=futurepedia",
-    description:
-      "Olympia introduces virtual team members with human-like capabilities, revolutionizing virtual team dynamics for solopreneurs and startups.",
-  },
-  {
-    Bookmarked: false,
-    id: "16",
-    Name: "Circleback.ai",
-    hashtag: "#personal assistant#transcriber#ai agents",
-    category: "Popular",
-    toolCategory: "personal assistant",
-    image: "/Assets/a9.svg",
-    rating: 1,
-    status: "free",
-    visitLink:
-      "https://www.circleback.ai/?utm_source=futurepedia&utm_medium=marketplace&utm_campaign=futurepedia",
-    description:
-      "Circleback.AI revolutionizes meeting notes and action item handling by providing concise records of discussions.",
-  },
-
-  // Add more items as needed
-];
+const ITEMS_PER_PAGE = 8;
 
 export default function AIAgent() {
   const [cards, setCards] = useState([]);
   const [filteredCards, setFilteredCards] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [toolCategories, setToolCategories] = useState([]);
-  const itemsPerPage = 8; // Set itemsPerPage directly here
-
-  const fetchCards = async () => {
-    const storedCards = JSON.parse(localStorage.getItem("cards")) || [];
-    const updatedCards = mergeItems(storedCards, newItems);
-    setCards(updatedCards);
-    setFilteredCards(updatedCards); // Set filteredCards initially
-    localStorage.setItem("cards", JSON.stringify(updatedCards));
-    setCategories(["Trending", "Popular", "New"]);
-    setToolCategories([
-      "Personal Assistant",
-      "Research",
-      "Design",
-      "Marketing",
-      "Startup tools",
-      "Avatars",
-    ]);
-  };
-
+  const [selectedFilter, setSelectedFilter] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
   const [itemOffset, setItemOffset] = useState(0);
-
-  const endOffset = itemOffset + itemsPerPage;
-
-  const currentItems = filteredCards.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(filteredCards.length / itemsPerPage);
-
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % filteredCards.length;
-    setItemOffset(newOffset);
-  };
-
-  console.log(currentItems); // Ensure this shows the correct data
+  const [alertConfig, setAlertConfig] = useState({ visible: false, message: "", id: null });
 
   useEffect(() => {
-    fetchCards();
+    const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    const agentTools = tools.map(t => ({
+      ...t,
+      Bookmarked: savedBookmarks.includes(t.id)
+    }));
+    setCards(agentTools);
+    setFilteredCards(agentTools);
   }, []);
-  const mergeItems = (existingItems, newItems) => {
-    const allItems = [...existingItems];
 
-    newItems.forEach((newItem) => {
-      const exists = existingItems.some((item) => item.id === newItem.id);
-      if (!exists) {
-        allItems.push(newItem);
-      }
-    });
-
-    return allItems;
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * ITEMS_PER_PAGE) % filteredCards.length;
+    setItemOffset(newOffset);
+    window.scrollTo({ top: 400, behavior: "smooth" });
   };
 
-  console.log(cards, "cards");
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-    const filtered = category
-      ? cards.filter((card) => card.category === category)
-      : cards; // Show all if no category selected
-    setFilteredCards(filtered);
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
     setItemOffset(0);
+    applyFilters(filter, searchQuery, cards);
   };
 
-  console.log(cards, "hello");
-  const handleToolCategoryChange = (toolCategory) => {
-    setSelectedCategory(toolCategory);
-    const filtered = toolCategory
-      ? cards.filter((card) => card.toolCategory === toolCategory.toLowerCase())
-      : cards; // Show all if no category selected
-    setFilteredCards(filtered);
+  const handleSearch = (query) => {
+    setSearchQuery(query);
     setItemOffset(0);
+    applyFilters(selectedFilter, query, cards);
   };
 
-  const handleBookmarkClick = (id) => {
-    const updatedCards = cards.map((card) => {
-      if (card.id === id) {
-        if (card.Bookmarked) {
-          const message = `Do you want to unsave ${card.Name}?`;
-          setAlertMessage(message); // Set alert message
-          setAlertModalVisible(true); // Show the alert modal
-          setPendingUnbookmarkId(id); // Store the id of the card to be unbookmarked
-          return card; // Return original card until user confirms
-        } else {
-          return { ...card, Bookmarked: true }; // Bookmark the card if not already bookmarked
-        }
-      }
-      return card; // Return other cards as is
-    });
+  const applyFilters = (filter, query, allCards) => {
+    let filtered = allCards;
 
-    setCards(updatedCards);
-    setFilteredCards(updatedCards); // Ensure filtered cards are updated as well
-    localStorage.setItem("cards", JSON.stringify(updatedCards)); // Update localStorage
-  };
-
-  const [alertModalVisible, setAlertModalVisible] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [pendingUnbookmarkId, setPendingUnbookmarkId] = useState(null);
-
-  const handleAlertModalClose = (confirmed) => {
-    setAlertModalVisible(false); // Close the modal
-    if (confirmed && pendingUnbookmarkId !== null) {
-      // Update the state to unbookmark the card if confirmed
-      setCards((prevCards) =>
-        prevCards.map((card) => {
-          if (card.id === pendingUnbookmarkId) {
-            return { ...card, Bookmarked: false }; // Unbookmark the card
-          }
-          return card;
-        })
-      );
-      console.log("User confirmed action");
-    } else {
-      console.log("User denied action");
+    if (filter !== "All") {
+      filtered = filtered.filter(c => c.category === filter || c.pricing === filter);
     }
-    setPendingUnbookmarkId(null); // Reset the pending ID
+
+    if (query) {
+      const q = query.toLowerCase();
+      filtered = filtered.filter(c =>
+        c.name.toLowerCase().includes(q) ||
+        c.tagline.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q)
+      );
+    }
+
+    setFilteredCards(filtered);
   };
 
-  const handleScrollTo = (sectionId) => {
-    window.scrollTo({
-      top: document.getElementById(sectionId).offsetTop,
-      behavior: "smooth",
-    });
+  const handleBookmark = (id) => {
+    const card = cards.find(c => c.id === id);
+    if (card.Bookmarked) {
+      setAlertConfig({ visible: true, message: `Remove ${card.name} from your saved agents?`, id });
+    } else {
+      toggleBookmark(id, true);
+    }
   };
+
+  const toggleBookmark = (id, status) => {
+    const updated = cards.map(c => c.id === id ? { ...c, Bookmarked: status } : c);
+    setCards(updated);
+    // Maintain filtering when bookmarking
+    applyFilters(selectedFilter, searchQuery, updated);
+
+    // Update global bookmarks list
+    const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    let newBookmarks;
+    if (status) {
+      newBookmarks = [...new Set([...savedBookmarks, id])];
+    } else {
+      newBookmarks = savedBookmarks.filter(bid => bid !== id);
+    }
+    localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
+  };
+
+  const endOffset = itemOffset + ITEMS_PER_PAGE;
+  const currentItems = filteredCards.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(filteredCards.length / ITEMS_PER_PAGE);
 
   return (
-    <>
-      <Header handleBookmarkClick={handleBookmarkClick} cards={cards} />
-      <div style={{ textAlign: "left", margin: "30px", color: "#fff" }}>
-        <h1>AI Agent Tools - Revolutionizing Automation & Productivity</h1>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexDirection: "row",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <h3
-              style={{
-                textAlign: "justify",
-                fontWeight: "normal",
-                marginRight: "30px",
-              }}
-            >
-              Embark on a transformative journey with automation tools that have
-              evolved significantly through AI agent technology...
-            </h3>
-            <div>
-              <BasicSelect
-                handleBusinessOperations={() =>
-                  handleScrollTo("business-operations")
-                }
-                handleAutomationTools={() => handleScrollTo("automation-tools")}
-                handleFunction={() => handleScrollTo("future-prospects")}
-              />
+    <div className="agent-page-wrapper">
+      <Header cards={cards} onSearch={handleSearch} />
+
+      <section className="agent-hero">
+        <div className="container">
+          <div className="agent-hero-content">
+            <div className="agent-badge">
+              <IconRobot size={18} />
+              <span>Autonomous Agents</span>
+            </div>
+            <h1 className="agent-title">The Future of <span className="gradient-text">Automation</span></h1>
+            <p className="agent-subtitle">
+              Discover powerful AI agents capable of autonomous research, coding, and complex task execution.
+              Future-proof your workflow today.
+            </p>
+
+            <div className="agent-search-bar">
+              <IconSearch size={22} />
+              <input type="text" placeholder="Search autonomous agents..." />
+              <button className="search-btn">Find Agents</button>
             </div>
           </div>
-          <img className="aiagentImg" src="/Assets/agent.avif" alt="aiagent" />
         </div>
-      </div>
+      </section>
 
-      <TrendingAI
-        cards={cards}
-        buttonActive={selectedCategory}
-        handleToolCategoryChange={handleToolCategoryChange}
-      />
+      <TrendingAI handleToolCategoryChange={(cat) => handleFilterChange(cat)} />
 
-      <div id="business-operations" className="categorydiv">
-        <div onClick={() => handleCategoryChange("Trending")}>Trending</div>
-        <div onClick={() => handleCategoryChange("Popular")}>Popular</div>
-        <div onClick={() => handleCategoryChange("New")}>New</div>
-        <div onClick={() => handleCategoryChange(null)}>All</div>
-      </div>
+      <main className="container agent-main">
+        <div className="filter-bar">
+          <div className="filter-group">
+            <button className={selectedFilter === "All" ? "active" : ""} onClick={() => handleFilterChange("All")}>All Agents</button>
+            <button className={selectedFilter === "Trending" ? "active" : ""} onClick={() => handleFilterChange("Trending")}>Trending</button>
+            <button className={selectedFilter === "Popular" ? "active" : ""} onClick={() => handleFilterChange("Popular")}>Popular</button>
+          </div>
+          <button className="advanced-filter-btn">
+            <IconAdjustmentsHorizontal size={20} />
+            <span>Filters</span>
+          </button>
+        </div>
 
-      <div id="automation-tools">
-        <div
-          style={{
-            display: "flex",
-            padding: "10px 0",
-            gap: "10px",
-            flexWrap: "wrap",
-            margin: "6%",
-          }}
-        >
-          {currentItems.map((card) => (
+        <div className="agent-grid">
+          {currentItems.map((tool) => (
             <AIImagecards
-              key={card.id}
-              item={card}
-              setCards={setCards}
-              cards={filteredCards} // use filtered cards
-              handleBookmarkClick={handleBookmarkClick}
+              key={tool.id}
+              item={tool}
+              handleBookmarkClick={handleBookmark}
             />
           ))}
         </div>
-        {alertModalVisible && (
-          <AlertModal
-            description={alertMessage}
-            onClose={handleAlertModalClose}
-            buttonok="Yes"
-          />
-        )}
 
-        <div className="pagination-container">
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel="next >"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={5}
-            pageCount={pageCount}
-            previousLabel="< previous"
-            renderOnZeroPageCount={null}
-            containerClassName="pagination" // Add class for styling
-            pageClassName="pagination-button"
-            previousClassName="pagination-button"
-            nextClassName="pagination-button"
-            activeClassName="active-page"
-          />
-        </div>
-      </div>
-      <AIEdu />
+        {pageCount > 1 && (
+          <div className="pagination-wrapper">
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel="Next"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              pageCount={pageCount}
+              previousLabel="Previous"
+              containerClassName="modern-pagination"
+              activeClassName="active"
+              disabledClassName="disabled"
+            />
+          </div>
+        )}
+      </main>
+
       <WebFooter />
-    </>
+
+      {alertConfig.visible && (
+        <AlertModal
+          description={alertConfig.message}
+          buttonok="Unsave"
+          onClose={(confirmed) => {
+            if (confirmed) toggleBookmark(alertConfig.id, false);
+            setAlertConfig({ visible: false, message: "", id: null });
+          }}
+        />
+      )}
+    </div>
   );
 }
+

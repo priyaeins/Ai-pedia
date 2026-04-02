@@ -1,135 +1,93 @@
-import React, { useState, useEffect } from "react";
-import VisitButtons from "../VisitBottons/VisitBottons";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { IconBookmark, IconBookmarkFilled } from "@tabler/icons-react"; // Correct package import
-import SavedAI from "../SavedAI/SavedAI";
+import { IconBookmark, IconBookmarkFilled, IconStarFilled, IconCircleCheckFilled, IconExternalLink } from "@tabler/icons-react";
 import "./AIImagecards.css";
-import ControlRating from "../Rating/Rating";
 
-export default function AIImagecards(props) {
+export default function AIImagecards({ item, handleBookmarkClick }) {
+  const navigate = useNavigate();
   const {
-    id = "1",
-    Name = "",
-    image = "/Assets/bg.jpg",
-    description = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio,",
-    rating = 5,
-    status = "free", // Default status
-    visit = "Visit", // Default value for visit button
-    visitLink = "https://example.com", // Default visit link
-    hashtag = "#hashtag",
-    Bookmarked = false,
-  } = props.item; // If props.item is undefined, provide defaults
+    id,
+    name,
+    image,
+    description,
+    rating,
+    pricing,
+    tagline,
+    tags = [],
+    Bookmarked,
+    verified,
+    favorites,
+    visitLink
+  } = item;
 
-  // If no valid card data, return null
-
-  const handleBookMark = () => {
-    // Call parent function passed via props to update bookmark state
-    if (props.handleBookmarkClick) {
-      props.handleBookmarkClick(id);
-    }
-  };
-
-  // Function to get style based on status
-  const getStatusStyle = (status) => {
-    switch (status) {
-      case "free":
-        return { color: "green" };
-      case "freeTrial":
-        return { color: "blue" };
-      case "freemium":
-        return { color: "blue" };
-      case "premium":
-        return { color: "red" };
-      case "paid":
-        return { color: "orange" };
-      default:
-        return { color: "VeryDarkGreen" };
-    }
+  const getPricingStyle = (pricing) => {
+    const p = pricing?.toLowerCase();
+    if (p === "free") return "pricing-free";
+    if (p === "freemium") return "pricing-freemium";
+    if (p === "paid") return "pricing-paid";
+    return "pricing-default";
   };
 
   return (
-    <div>
-      <div className="card">
-        <div className="card-header">
-          <h1 className="card-subtitle">{Name}</h1>
-          <img src={image} className="card-image" alt="card" />
-          <div
-            style={{
-              flex: 1,
-              margin: "10px",
-              marginTop: "20px",
-              fontSize: "14px",
-              textAlign: "center",
+    <div className="ai-card" onClick={() => navigate(`/tool/${id}`)} style={{ cursor: "pointer" }}>
+      <div className="card-image-wrapper">
+        <img src={image} alt={name} className="card-banner-image" />
+        <div className="card-badge-container">
+          <span className={`pricing-badge ${getPricingStyle(pricing)}`}>
+            {pricing}
+          </span>
+          <button
+            className={`bookmark-btn ${Bookmarked ? "active" : ""}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleBookmarkClick(id);
             }}
           >
-            {hashtag}
+            {Bookmarked ? <IconBookmarkFilled size={18} /> : <IconBookmark size={18} />}
+          </button>
+        </div>
+      </div>
+
+      <div className="card-body-content">
+        <div className="card-header-row">
+          <div className="name-group">
+            <h3 className="tool-name">
+              {name}
+              {verified && <IconCircleCheckFilled size={16} className="verified-icon" />}
+            </h3>
+            <p className="tool-tagline">{tagline}</p>
+          </div>
+          <div className="rating-group">
+            <IconStarFilled size={14} className="star-icon" />
+            <span className="rating-value">{rating}</span>
           </div>
         </div>
-        <div className="card-content">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "row",
-            }}
-          >
-            <h2 className="card-title">Something Awesome</h2>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "row",
-            }}
-          >
-            {status && (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <p
-                  style={{
-                    color: getStatusStyle(status).color,
-                    backgroundColor: "lightgray",
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    fontSize: "14px",
-                  }}
-                >
-                  {status}
-                </p>
-              </div>
-            )}
-            <div
-              style={{ cursor: "pointer", color: "gray" }}
-              onClick={handleBookMark}
-            >
-              {Bookmarked ? <IconBookmarkFilled /> : <IconBookmark />}
-            </div>
-          </div>
-          <p className="card-body">{description}</p>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between", // Ensures items are spaced across the container
-              alignItems: "center", // Vertically aligns the items
-            }}
-          >
-            {/* ControlRating aligned to the flex start */}
-            <ControlRating
-              initialValue={rating} // Pass initial rating value
-              readOnly={true}
-              readOnlyLabel="Rating"
-            />
+        <p className="tool-description">{description}</p>
 
-            {/* VisitButtons aligned to the flex end */}
-            <VisitButtons
-              title={visit} // Pass the visit title from props
-              onClick={() => window.open(visitLink, "_blank")} // Use visitLink from props
-              style={{ marginLeft: "auto" }} // Aligns the button to the end of the flex container
-            />
+        <div className="card-tags">
+          {tags.slice(0, 3).map((tag, index) => (
+            <span key={index} className="tag-pill">{tag}</span>
+          ))}
+        </div>
+
+        <div className="card-footer-row">
+          <div className="stats-group">
+            <IconBookmarkFilled size={14} className="fav-icon" />
+            <span className="fav-count">{favorites?.toLocaleString()}</span>
           </div>
+          <a
+            href={visitLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="visit-site-btn"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Visit Website <IconExternalLink size={14} />
+          </a>
         </div>
       </div>
     </div>
   );
 }
+

@@ -1,103 +1,160 @@
-.tutorial-container {
-  padding: 20px;
+.tutorial-page-wrapper {
+  padding-top: 80px;
 }
 
-/* Header Section */
-.tutorial-header-container {
+.tutorial-hero {
+  padding: 80px 0;
+  background: white;
   text-align: center;
 }
 
-/* Title of the Tutorials */
-.tutorial-title {
-  color: #fff;
-  font-size: 2.5rem;
+.tutorial-page-title {
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 24px;
 }
 
-/* Breadcrumb Navigation */
-.tutorial-breadcrumb {
-  margin: 10px 0;
-  padding: 0 10px;
-  font-size: 14px;
-  color: #fff;
+.tutorial-page-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 40px;
 }
 
-.tutorial-breadcrumb span {
-  cursor: pointer;
-  padding-right: 10px;
-  color: #007bff; /* Link color */
-}
-
-.tutorial-breadcrumb span:hover {
-  text-decoration: underline; /* Underline on hover */
-}
-
-/* Search Bar Section */
-.tutorial-search-bar {
-  margin: 10px;
-  text-align: center;
-}
-
-/* Input field for the Search Bar */
-.tutorial-search-input {
-  padding: 10px;
-  width: 100%;
+.tutorial-search-wrapper {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid var(--border-color);
+  padding: 12px 24px;
+  border-radius: 100px;
+  box-shadow: var(--shadow-md);
   max-width: 500px;
-  box-sizing: border-box; /* Include padding in width */
-  border: 1px solid #ccc;
-  border-radius: 4px; /* Rounded corners */
+  margin: 0 auto;
 }
 
-/* Card Container Section */
-.tutorial-card-container {
+.tutorial-search-wrapper input {
+  border: none;
+  flex: 1;
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-family: var(--font-main);
+  outline: none;
+}
+
+.tutorial-main {
+  padding: 60px 0 100px;
+}
+
+.tutorial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+}
+
+.modern-tutorial-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modern-tutorial-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.tutorial-thumb-container {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+
+.tutorial-thumb-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.modern-tutorial-card:hover .tutorial-thumb-container img {
+  transform: scale(1.05);
+}
+
+.play-btn-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 60px;
+  height: 60px;
+  background: white;
+  color: var(--text-primary);
+  border-radius: 50%;
   display: flex;
-  flex-wrap: wrap; /* Allow cards to wrap */
-  gap: 50px; /* Space between cards */
-  padding: 10px;
-  justify-content: center; /* Center cards horizontally */
-  margin-top: 50px; /* Space above card container */
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Individual Tutorial Card */
-.tutorial-card {
-  display: flex;
-  flex-direction: column; /* Stack image and content vertically */
-  align-items: center; /* Center align items */
-  background: #fff; /* Card background color */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(245, 241, 241, 0.8); /* Shadow effect */
-  width: 250px; /* Fixed width for cards */
-  overflow: hidden; /* Prevent overflow */
-  transition: transform 0.3s; /* Smooth scaling effect */
+.modern-tutorial-card:hover .play-btn-circle {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
-/* Hover effect on card */
-.tutorial-card:hover {
-  transform: scale(1.05); /* Scale card on hover */
+.duration-tag {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
 }
 
-/* Image in the Tutorial Card */
-.tutorial-card-image {
-  width: 100%; /* Full width */
-  height: auto; /* Maintain aspect ratio */
-  object-fit: cover; /* Cover the image area */
+.tutorial-card-body {
+  padding: 24px;
 }
 
-/* Content inside the Card */
-.tutorial-card-content {
-  padding: 15px; /* Space around content */
-  text-align: center; /* Center align text */
+.level-badge {
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 12px;
 }
 
-/* Title of the Card */
-.tutorial-card-title {
-  font-size: 18px; /* Font size for title */
-  margin: 10px 0; /* Margin above and below title */
-  color: #17153b; /* Title color */
-  cursor: pointer; /* Pointer on hover */
+.tutorial-card-body h3 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  line-height: 1.4;
 }
 
-/* Description of the Card */
-.tutorial-card-description {
-  font-size: 14px; /* Font size for description */
-  color: #666; /* Description color */
+.tutorial-card-body p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .tutorial-page-title {
+    font-size: 2.5rem;
+  }
 }

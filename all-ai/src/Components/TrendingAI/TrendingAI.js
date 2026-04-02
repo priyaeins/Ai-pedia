@@ -1,64 +1,56 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import React from "react";
+import { IconFlame, IconCode, IconPaint, IconMessageChatbot, IconSearch, IconUserCircle, IconChevronRight } from "@tabler/icons-react";
 import "./TrendingAI.css";
 
-function TrendingAI({ cards, handleToolCategoryChange }) {
-  const [filteredCards, setFilteredCards] = useState(cards);
-  const [selectedCategory, setSelectedCategory] = useState(null); // State for selected category
-  const navigate = useNavigate(); // Create a navigate function
+const categoryData = [
+  { name: "Chatbots", icon: <IconMessageChatbot size={32} />, count: "1,240 tools", color: "#E0F2FE" },
+  { name: "Design", icon: <IconPaint size={32} />, count: "850 tools", color: "#F0FDF4" },
+  { name: "Development", icon: <IconCode size={32} />, count: "620 tools", color: "#FEF2F2" },
+  { name: "Search", icon: <IconSearch size={32} />, count: "120 tools", color: "#FFFBEB" },
+  { name: "Writing", icon: <IconUserCircle size={32} />, count: "430 tools", color: "#F5F3FF" }
+];
 
-  const handleFilter = (toolCategories) => {
-    const filtered = cards.filter(
-      (card) => card.toolCategories === toolCategories
-    );
-    setFilteredCards(filtered);
-    setSelectedCategory(toolCategories);
-    handleToolCategoryChange(selectedCategory);
-
-    // Navigate to AIAgent after handling the category change
-    navigate("/AIAgent");
-  };
-
+function TrendingAI({ handleToolCategoryChange }) {
   return (
-    <section className="categoriesDiv">
-      <div className="categoriesDiv1">
-        <img
-          className="categoriesImg1"
-          src="./assets/flame.png"
-          alt="Categories"
-        />
-        <h1 className="categoriesH1" style={{ color: "#fff" }}>
-          Trending Categories
-        </h1>
-      </div>
-      <h3 style={{ color: "#fff" }}>
-        <center>
-          Explore our editorial favorites and popular AI tools in these trending
-          categories
-        </center>
-      </h3>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          width: "100%",
-          gap: "10px",
-        }}
-      >
-        <button onClick={() => handleFilter("Research")}>Research</button>
-        <button onClick={() => handleFilter("Personal Assistant")}>
-          Personal Assistant
-        </button>
-        <button onClick={() => handleFilter("startup tools")}>
-          startup tools
-        </button>
-        <button onClick={() => handleFilter("avatars")}>avatars</button>
-        <button onClick={() => handleFilter("Design")}>Design</button>
+    <section className="trending-categories-section">
+      <div className="container">
+        <div className="trending-header">
+          <div className="title-with-icon">
+            <div className="flame-icon-wrapper">
+              <IconFlame size={24} className="flame-icon" />
+            </div>
+            <h2 className="trending-title">Trending Categories</h2>
+          </div>
+          <p className="trending-subtitle">
+            Explore our editorial favorites and popular AI tools in these featured domains.
+          </p>
+        </div>
+
+        <div className="categories-grid">
+          {categoryData.map((cat, index) => (
+            <div
+              key={index}
+              className="category-card"
+              onClick={() => handleToolCategoryChange(cat.name)}
+              style={{ "--cat-bg": cat.color }}
+            >
+              <div className="category-icon-box">
+                {cat.icon}
+              </div>
+              <div className="category-info">
+                <h4 className="category-name">{cat.name}</h4>
+                <p className="category-count">{cat.count}</p>
+              </div>
+              <div className="category-arrow">
+                <IconChevronRight size={20} />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 export default TrendingAI;
+

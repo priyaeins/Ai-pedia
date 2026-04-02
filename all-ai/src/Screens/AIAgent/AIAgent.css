@@ -1,110 +1,190 @@
-/* agent.css */
-
-/* Agent Image Style */
-.aiagentImg {
-  width: 70%;
-  height: 30vh;
-  object-fit: cover;
-  margin-right: 80px; /* Adjust as needed */
-  border-radius: 4px;
+.agent-page-wrapper {
+  padding-top: 80px;
 }
 
-/* Heading Styles */
-h1,
-h2,
-h3,
-h4,
-h5 {
-  line-height: 2.5; /* Adjust line height for readability */
+.agent-hero {
+  padding: 100px 0 60px;
+  background: white;
+  position: relative;
+  overflow: hidden;
 }
-.categorydiv {
-  margin-left: 110px;
-  flex-direction: row;
-  flex: 1;
+
+.agent-hero::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 40%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.agent-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+
+.agent-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #EEF2FF;
+  color: #4F46E5;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.agent-title {
+  font-size: 4.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.agent-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.agent-search-bar {
   display: flex;
-  gap: 30px;
-  margin-top: 80px;
-  font-size: 20px; /* Remove the double font-size declaration */
+  align-items: center;
+  background: white;
+  border: 1px solid var(--border-color);
+  padding: 8px 8px 8px 24px;
+  border-radius: 100px;
+  box-shadow: var(--shadow-md);
+  max-width: 600px;
 }
 
-/* Category items */
-.categorydiv {
-  transition:
-    background-color 0.3s,
-    color 0.3s,
-    transform 0.3s; /* Smooth transitions */
+.agent-search-bar input {
+  border: none;
+  flex: 1;
+  padding: 12px;
+  font-size: 1rem;
+  font-family: var(--font-main);
+  outline: none;
 }
 
-/* Hover effect */
-.categorydiv > div:hover {
-  cursor: pointer;
-  background-color: #04102c;
+.search-btn {
+  background: var(--text-primary);
   color: white;
-  font-weight: 800;
-  text-decoration: underline; /* Underline on hover */
-  transform: scaleX(1.1);
-  border-color: aliceblue;
-  border-radius: 10px;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-weight: 700;
 }
 
-/* Active effect (you may need to add an active class in your JavaScript) */
-.categorydiv > div.active {
-  cursor: pointer;
-  background-color: #04102c;
+.agent-main {
+  padding: 40px 0 100px;
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filter-group {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-group button {
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.filter-group button.active {
+  background: var(--text-primary);
   color: white;
-  font-weight: 800;
-  text-decoration: underline; /* Underline on hover */
-  transform: scaleX(1.1);
 }
 
-/* Pagination Container */
-.pagination-container {
+.advanced-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 32px;
+}
+
+/* Pagination */
+.pagination-wrapper {
+  margin-top: 60px;
   display: flex;
   justify-content: center;
-  flex-direction: row; /* Correct usage without quotes */
-  gap: 10px;
-  margin: 10px;
-  margin-top: 2%;
-  background-color: #cecece;
-  color: #04102c;
-  padding: 10px 0;
 }
 
-/* Pagination Button */
-.pagination-button {
-  border: 1px solid #04102c;
-  padding: 8px 12px;
-  border-radius: 3px;
-  text-decoration: none;
-  color: #04102c;
-  background-color: white;
-  transition: background-color 0.2s ease-in-out;
+.modern-pagination {
+  display: flex;
+  list-style: none;
+  gap: 8px;
 }
 
-.pagination-button:hover {
-  background-color: #04102c;
-  color: white;
+.modern-pagination li a {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.pagination-button:active {
-  transform: scale(0.98);
-  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-}
-
-/* Active Page Button */
-.active-page {
-  background-color: #04102c;
+.modern-pagination li.active a {
+  background: var(--primary);
   color: white;
-  border: 1px solid #04102c;
-  padding: 8px 12px;
-  border-radius: 3px;
-  cursor: default;
+  border-color: var(--primary);
 }
 
-/* Flex settings for the pagination class */
-.pagination {
-  display: flex; /* Ensure pagination uses flexbox */
-  flex-direction: row; /* Ensures items are in a row */
-  gap: 10px;
+.modern-pagination li:not(.active):hover a {
+  background: #F8FAFC;
+  border-color: var(--text-primary);
+}
+
+@media (max-width: 1024px) {
+  .agent-title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .agent-title {
+    font-size: 2.5rem;
+  }
+
+  .agent-search-bar {
+    padding: 4px 4px 4px 16px;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
 }

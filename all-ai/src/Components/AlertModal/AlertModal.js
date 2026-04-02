@@ -1,22 +1,36 @@
 import React from "react";
-import "./AlertModal.css"; // Make sure to import the CSS file
+import { IconX, IconAlertCircle } from "@tabler/icons-react";
+import "./AlertModal.css";
 
-function AlertModal({ description, onClose, buttonok, buttoncancel = null }) {
+function AlertModal({ description, onClose, buttonok, buttoncancel = "Cancel" }) {
   return (
-    // alert
-    <div className="alert-modal">
-      <div className="alert-modal-content">
-        <h3>{description}</h3>
-        <button onClick={() => onClose(true)}>{buttonok}</button>
-        {buttoncancel && (
-          <button onClick={() => onClose(false)}>{buttoncancel}</button>
-        )}
+    <div className="alert-backdrop" onClick={() => onClose(false)}>
+      <div className="alert-window" onClick={e => e.stopPropagation()}>
+        <div className="alert-header">
+          <div className="alert-icon-wrapper">
+            <IconAlertCircle size={24} />
+          </div>
+          <button className="alert-close-btn" onClick={() => onClose(false)}>
+            <IconX size={20} />
+          </button>
+        </div>
+        <div className="alert-body">
+          <p className="alert-desc">{description}</p>
+        </div>
+        <div className="alert-footer">
+          {buttoncancel && (
+            <button className="btn-cancel" onClick={() => onClose(false)}>
+              {buttoncancel}
+            </button>
+          )}
+          <button className="btn-confirm" onClick={() => onClose(true)}>
+            {buttonok}
+          </button>
+        </div>
       </div>
-      <span className="close-button" onClick={() => onClose(false)}>
-        X
-      </span>
     </div>
   );
 }
 
 export default AlertModal;
+

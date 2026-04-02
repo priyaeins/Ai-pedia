@@ -1,293 +1,172 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../Components/Header/Header"; // Ensure this import is correct
-import "./Home.css";
-import WebFooter from "../../Components/Footer/Footer";
+import Header from "../../Components/Header/Header";
 import AIImagecards from "../../Components/AIImagecards/AIImagecards";
-import Carousel from "react-material-ui-carousel";
-import SavedContext from "../../lib/SavedContext";
+import WebFooter from "../../Components/Footer/Footer";
 import YoutubeVideoCard from "../../Components/YoutubeVideoCard/YoutubeVideoCard";
 import TrendingAI from "../../Components/TrendingAI/TrendingAI";
 import AlertModal from "../../Components/AlertModal/AlertModal";
-
-const items = [
-  {
-    Bookmarked: false,
-    id: "1",
-    Name: "AutoGPT",
-    hashtag: "#autogpt #ai #openai",
-    image: "/Assets/a1.webp",
-    rating: 5,
-    status: "free",
-    visitLink:
-      "https://github.com/Significant-Gravitas/AutoGPT?utm_source=futurepedia&utm_medium=marketplace&utm_campaign=futurepedia",
-    description:
-      "AutoGPT is a groundbreaking open-source platform designed to democratize the power of AI, making it accessible to everyone for both usage and development.",
-    category: "Trending", // Example category
-    toolCategory: "Research", // Example tool category
-  },
-  {
-    Bookmarked: false,
-    id: "2",
-    Name: "ChatGPT",
-    hashtag: "#chatgpt #ai #openai",
-    image: "/Assets/chatgpt.png",
-    rating: 5,
-    status: "free",
-    visitLink: "https://chatgpt.com/",
-    description:
-      "ChatGPT is a powerful AI conversational model developed by OpenAI, used widely for automating customer service and personal assistants.",
-    category: "Popular",
-    toolCategory: "Personal Assistant",
-  },
-  {
-    Bookmarked: false,
-    id: "3",
-    Name: "AssemblyAI",
-    hashtag: "#ai agents #transcriber",
-    image: "/Assets/b4.avif",
-    rating: 5,
-    status: "free trial",
-    visitLink:
-      "https://www.assemblyai.com/?utm_source=futurepedia&utm_medium=cpc&utm_campaign=web_sponsor",
-    description:
-      "AssemblyAI is a cutting-edge tool that revolutionizes the field of speech recognition and analysis with its state-of-the-art Speech AI models.",
-    category: "New",
-    toolCategory: "Research",
-  },
-  {
-    Bookmarked: false,
-    id: "4",
-    Name: "Tidalflow",
-    hashtag: "#fitness #personal assistant #health",
-    image: "/Assets/b2.avif",
-    rating: 1,
-    status: "free",
-    visitLink: "https://www.futurepedia.io/tool/tidalflow",
-    description:
-      "Tidalflow is an innovative platform that helps individuals manage their fitness and personal health with AI-driven insights.",
-    category: "Trending",
-    toolCategory: "Personal Assistant",
-  },
-  {
-    Bookmarked: false,
-    id: "5",
-    Name: "1PX.AI",
-    hashtag: "#marketing #e-commerce #image editing",
-    image: "/Assets/b1.avif",
-    rating: 1,
-    status: "paid",
-    visitLink:
-      "https://1px.ai/?utm_source=futurepedia&utm_medium=marketplace&utm_campaign=futurepedia",
-    description:
-      "1PX.AI is a cutting-edge AI tool designed to transform the way businesses and professionals handle image processing tasks.",
-    category: "Popular",
-    toolCategory: "Marketing",
-  },
-  {
-    Bookmarked: false,
-    id: "6",
-    Name: "Thunderbit",
-    hashtag: "#workflows #personalassistant #low-code/no-code",
-    image: "/Assets/b5.avif",
-    rating: 2,
-    status: "free",
-    visitLink: "",
-    description:
-      "Thunderbit is a powerful tool for creating workflows with minimal coding required, streamlining various business processes.",
-    category: "New",
-    toolCategory: "Startup Tools",
-  },
-  {
-    Bookmarked: false,
-    id: "7",
-    Name: "BeforeSunset",
-    hashtag: "#chatgpt #ai #openai",
-    image: "/Assets/b6.avif",
-    rating: 1,
-    status: "freemium",
-    visitLink: "",
-    description:
-      "BeforeSunset provides AI-driven solutions to enhance customer engagement and interaction.",
-    category: "Popular",
-    toolCategory: "Personal Assistant",
-  },
-  {
-    Bookmarked: false,
-    id: "8",
-    Name: "Rapport",
-    hashtag: "#ai agents #customer support #marketing",
-    image: "/Assets/a2.webp",
-    rating: 1,
-    status: "freemium",
-    visitLink: "",
-    description:
-      "Rapport provides AI-driven solutions to enhance customer engagement and interaction.",
-    category: "Trending",
-    toolCategory: "Marketing",
-  },
-  // Add more items as needed
-];
+import { tools as initialTools, categories } from "../../data/tools";
+import "./Home.css";
 
 export default function Home() {
-  const [saved, setSaved] = useState();
-  const [cards, setCards] = useState(items);
+  const [tools, setTools] = useState(initialTools);
+  const [filteredTools, setFilteredTools] = useState(initialTools);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [filteredCards, setFilteredCards] = useState([]);
-  const [toolCategories, setToolCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-  useEffect(() => {
-    localStorage.setItem("cards", JSON.stringify(cards));
-  }, [cards]);
-
-  const handleToolCategoryChange = (toolCategory) => {
-    setSelectedCategory(toolCategory);
-    const filtered = toolCategory
-      ? cards.filter((card) => card.toolCategory === toolCategory)
-      : cards; // Show all if no category selected
-    setFilteredCards(filtered);
-  };
-
-  useEffect(() => {
-    const fetchSavedData = async () => {
-      try {
-        const savedData = await SavedContext.saved.retrieve();
-        setCards(savedData); // Set cards to the saved data
-        setFilteredCards(savedData); // Set filteredCards initially
-        localStorage.setItem("cards", JSON.stringify(savedData));
-      } catch (error) {
-        console.error("Failed to retrieve saved data:", error);
-      }
-    };
-    fetchSavedData();
-
-    // Set tool categories
-    setToolCategories(["Chatbots", "Research", "Design", "Marketing"]);
-  }, []);
-
-  // Update filteredCards whenever the selected category or cards change
-  useEffect(() => {
-    handleToolCategoryChange(selectedCategory);
-  }, [cards, selectedCategory]);
-
-  const handleModal = () => {
-    setShowModal((prevShowModal) => !prevShowModal);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const handleClickOutside = (event) => {
-    const modal = document.getElementById("myModal");
-    if (modal && event.target === modal) {
-      closeModal();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("click", handleClickOutside);
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
-    };
-  }, [showModal]);
-  const handleBookmarkClick = (id) => {
-    setCards((prevCards) => {
-      return prevCards.map((card) => {
-        if (card.id === id) {
-          // If the card is currently bookmarked
-          if (card.Bookmarked) {
-            const message = `Do you want to unsave ${card.Name}?`;
-            setAlertMessage(message); // Set alert message
-            setAlertModalVisible(true); // Show the alert modal
-            setPendingUnbookmarkId(id); // Store the id of the card to be unbookmarked
-          } else {
-            // If the card is not bookmarked, just update the state
-            return { ...card, Bookmarked: true };
-          }
-        }
-        return card;
-      });
-    });
-  };
-
   const [alertModalVisible, setAlertModalVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [pendingUnbookmarkId, setPendingUnbookmarkId] = useState(null);
 
-  const handleAlertModalClose = (confirmed) => {
-    setAlertModalVisible(false); // Close the modal
-    if (confirmed && pendingUnbookmarkId !== null) {
-      // Update the state to unbookmark the card if confirmed
-      setCards((prevCards) =>
-        prevCards.map((card) => {
-          if (card.id === pendingUnbookmarkId) {
-            return { ...card, Bookmarked: false }; // Unbookmark the card
-          }
-          return card;
-        })
-      );
-    } else {
+  // Sync with local storage
+  useEffect(() => {
+    const savedBookmarks = localStorage.getItem("bookmarks");
+    if (savedBookmarks) {
+      const bookmarkIds = JSON.parse(savedBookmarks);
+      setTools(prev => prev.map(tool => ({
+        ...tool,
+        Bookmarked: bookmarkIds.includes(tool.id)
+      })));
     }
-    setPendingUnbookmarkId(null); // Reset the pending ID
-  };
-  return (
-    <>
-      <Header handleBookmarkClick={handleBookmarkClick} cards={cards} />
-      <div className="HeroContainer">
-        <img className="heroBg" src="/Assets/background.png" alt="Hero Image" />
-        <div className="heroText">
-          <p className="heroTitle" style={{ marginBottom: "2px" }}>
-            Boost Productivity. Embrace AI.
-          </p>
-          <h3 className="heroSubTitle">
-            Discover how 10M+ professionals and businesses are leveraging AI to
-            enhance revenue, efficiency, and savings.
-          </h3>
-          <button onClick={handleModal} className="heroBtn">
-            Get Started
-          </button>
-        </div>
-      </div>
+  }, []);
 
-      {showModal && (
-        <div className="modal" id="myModal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>
-              &times;
-            </span>
-            <section>
-              <div className="modalSection">
-                <div className="modalText">
-                  <h1>World of AI</h1>
-                  <h3 className="modalH1">Get personalized recommendations</h3>
-                  <h5>
-                    Based on your profile and preferences, we’ll recommend tools
-                    that can help you work smarter.
-                  </h5>
-                  <h3 className="modalH1">Save your favorites</h3>
-                  <h5>
-                    Create a shortlist of interesting AI tools, plugins, and
-                    content.
-                  </h5>
-                  <h3 className="modalH1">Rate & review AI tools</h3>
-                  <h5>
-                    Share your experiences and help others try tools that will
-                    work for them.
-                  </h5>
-                </div>
-                <div className="modalImgDiv">
-                  <img
-                    className="modalImg"
-                    src="/Assets/1.jpg"
-                    alt="AI tools"
-                  />
-                </div>
-              </div>
-            </section>
+  // Update filtered list when category or search changes
+  useEffect(() => {
+    filterTools(selectedCategory, searchQuery, tools);
+  }, [tools, selectedCategory, searchQuery]);
+
+  const filterTools = (category, query, allTools) => {
+    let filtered = allTools;
+
+    if (category !== "All") {
+      filtered = filtered.filter(tool => tool.category === category);
+    }
+
+    if (query) {
+      const q = query.toLowerCase();
+      filtered = filtered.filter(tool =>
+        tool.name.toLowerCase().includes(q) ||
+        tool.tagline.toLowerCase().includes(q) ||
+        tool.description.toLowerCase().includes(q)
+      );
+    }
+
+    setFilteredTools(filtered);
+  };
+
+  const toggleBookmark = (id, status) => {
+    const updated = tools.map(t => t.id === id ? { ...t, Bookmarked: status } : t);
+    setTools(updated);
+
+    // Update global bookmarks array safely
+    const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    let newBookmarks;
+    if (status) {
+      newBookmarks = [...new Set([...savedBookmarks, id])];
+    } else {
+      newBookmarks = savedBookmarks.filter(bid => bid !== id);
+    }
+    localStorage.setItem("bookmarks", JSON.stringify(newBookmarks));
+  };
+
+  const handleBookmarkClick = (id) => {
+    const tool = tools.find(t => t.id === id);
+    if (tool.Bookmarked) {
+      setAlertMessage(`Do you want to remove ${tool.name} from your bookmarks?`);
+      setPendingUnbookmarkId(id);
+      setAlertModalVisible(true);
+    } else {
+      toggleBookmark(id, true);
+    }
+  };
+
+  const handleAlertModalClose = (confirmed) => {
+    if (confirmed && pendingUnbookmarkId) {
+      toggleBookmark(pendingUnbookmarkId, false);
+    }
+    setAlertModalVisible(false);
+    setPendingUnbookmarkId(null);
+  };
+
+  return (
+    <div className="home-wrapper">
+      <Header
+        handleBookmarkClick={handleBookmarkClick}
+        cards={tools}
+        onSearch={(q) => setSearchQuery(q)}
+      />
+
+      <section className="hero-section">
+        <div className="hero-overlay"></div>
+        <div className="container hero-content">
+          <h1 className="hero-title">
+            Find the <span className="gradient-text">Perfect AI Tool</span> for Any Task
+          </h1>
+          <p className="hero-subtitle">
+            Join 10M+ users discovering the next generation of AI productivity tools.
+            Updated daily with the latest releases in the AI ecosystem.
+          </p>
+          <div className="hero-actions">
+            <button className="btn-primary" onClick={() => setShowModal(true)}>
+              Get Personalized Suggestions
+            </button>
+            <button className="btn-secondary">
+              Browse All categories
+            </button>
           </div>
         </div>
-      )}
+      </section>
+
+      <main className="container main-content">
+        <div className="category-bar">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              className={`category-pill ${selectedCategory === cat ? "active" : ""}`}
+              onClick={() => setSelectedCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <div className="section-header">
+          <h2 className="section-title">
+            {selectedCategory === "All" ? "Trending AI Tools" : `${selectedCategory} Tools`}
+          </h2>
+          <p className="section-desc">Hand-picked and verified tools to boost your workflow.</p>
+        </div>
+
+        <div className="tools-grid">
+          {filteredTools.map(tool => (
+            <AIImagecards
+              key={tool.id}
+              item={tool}
+              handleBookmarkClick={handleBookmarkClick}
+            />
+          ))}
+        </div>
+
+        {filteredTools.length === 0 && (
+          <div className="empty-state">
+            <h3>No tools found in this category.</h3>
+            <p>Try exploring another category or check back later!</p>
+          </div>
+        )}
+      </main>
+
+      <section className="featured-video">
+        <div className="container">
+          <YoutubeVideoCard />
+        </div>
+      </section>
+
+      <TrendingAI
+        cards={tools}
+        handleToolCategoryChange={(cat) => setSelectedCategory(cat)}
+      />
+
+      <WebFooter />
 
       {alertModalVisible && (
         <AlertModal
@@ -297,38 +176,37 @@ export default function Home() {
         />
       )}
 
-      <section className="carouselContainer">
-        <div
-          className="carouselInner"
-          style={{
-            display: "flex",
-            overflowX: "auto", // Enable horizontal scrolling
-            padding: "10px 0", // Optional padding for aesthetic spacing
-            gap: "10px", // Spacing between cards
-          }}
-        >
-          {filteredCards.map((card) => (
-            <AIImagecards
-              key={card.id}
-              item={card}
-              setCards={setCards}
-              cards={filteredCards} // use filtered cards
-              handleBookmarkClick={handleBookmarkClick}
-            />
-          ))}
+      {showModal && (
+        <div className="modal-backdrop" onClick={() => setShowModal(false)}>
+          <div className="modal-window" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowModal(false)}>&times;</button>
+            <div className="modal-grid">
+              <div className="modal-info">
+                <h2>Welcome to AI-Pedia</h2>
+                <div className="info-item">
+                  <h4>Smart Recommendations</h4>
+                  <p>Get AI tools matched to your specific professional needs and goals.</p>
+                </div>
+                <div className="info-item">
+                  <h4>Save for Later</h4>
+                  <p>Build your personalized library of essential AI tools and resources.</p>
+                </div>
+                <div className="info-item">
+                  <h4>Community Reviews</h4>
+                  <p>Read transparent feedback from other professionals in your industry.</p>
+                </div>
+                <button className="btn-primary" style={{ marginTop: '20px', width: '100%' }}>
+                  Sign Up for Free
+                </button>
+              </div>
+              <div className="modal-media">
+                <img src="/Assets/1.jpg" alt="AI Tools Showcase" />
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
-      <div>
-        <YoutubeVideoCard />
-      </div>
-
-      <div>
-        <TrendingAI
-          cards={cards}
-          handleToolCategoryChange={handleToolCategoryChange}
-        />
-      </div>
-      <WebFooter />
-    </>
+      )}
+    </div>
   );
 }
+
